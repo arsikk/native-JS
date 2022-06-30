@@ -247,6 +247,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const forms = document.querySelectorAll('form');
 
+    forms.forEach( (form) => {
+       postData(form); 
+    });
+
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -255,13 +259,13 @@ window.addEventListener('DOMContentLoaded', () => {
             messageStatus = document.createElement('div');
             messageStatus.classList.add('status');
             messageStatus.textContent = message.loading;
-            messageStatus.append('form');
+            form.append('form');
 
             
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
 
-            request.setRequestHeader('Content-type', 'application/jsos');
+            request.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
 
@@ -275,12 +279,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
             request.send(json);
 
-            request.addEventListener('load', ()=>{
+            request.addEventListener('load', () => {
                 if (request.status ===  200) {
                     console.log(request.response);
                     messageStatus.textContent = message.success;
                 } else {
-                    message.status.textContent = message.failure;
+                    messageStatus.textContent = message.failure;
                 
                 }
             });
