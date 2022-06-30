@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } );
 
 //timer
-    const deadline = '202-07-29';
+    const deadline = '2022-08-27';
 
 
     function getTimeRemaining(endtime)  {
@@ -148,7 +148,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
- //   const  modalTimerId = setTimeout(openModal,3000);
+     const  modalTimerId = setTimeout(openModal,3000);
     
     function showModalByScroll() {
         if( window.pageYOffset + document.documentElement.clientHeight >=  document.documentElement.scrollHeight-1) {
@@ -234,5 +234,59 @@ window.addEventListener('DOMContentLoaded', () => {
            430,
            'menu__item'
     ).render();
+
+
+
+    // forms
+
+    const message = {
+        loading: 'Загрузка',
+        success:  'Успешно',
+        failure: 'Что-то пошло не так'
+    };
+
+    const forms = document.querySelectorAll('form');
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+
+            messageStatus = document.createElement('div');
+            messageStatus.classList.add('status');
+            messageStatus.textContent = message.loading;
+            messageStatus.append('form');
+
+            
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+
+            request.setRequestHeader('Content-type', 'application/jsos');
+            const formData = new FormData(form);
+
+
+            const object = {};
+
+            formData.forEach(function(value,key) {
+                object[key] = value;
+            });
+
+            const json = JSON.stringify(object);
+
+            request.send(json);
+
+            request.addEventListener('load', ()=>{
+                if (request.status ===  200) {
+                    console.log(request.response);
+                    messageStatus.textContent = message.success;
+                } else {
+                    message.status.textContent = message.failure;
+                
+                }
+            });
+
+        });
+    
+    }
 
 });
